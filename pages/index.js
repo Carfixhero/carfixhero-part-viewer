@@ -1,4 +1,4 @@
-// Step 1: Basic Image Viewer (clickable coordinates)
+// Step 1: Basic Image Viewer (clickable coordinates + red dots)
 // This file goes into: pages/index.js
 
 import { useRef, useState } from 'react';
@@ -6,6 +6,7 @@ import { useRef, useState } from 'react';
 export default function Home() {
   const fileInputRef = useRef(null);
   const [imgSrc, setImgSrc] = useState(null);
+  const [clicks, setClicks] = useState([]);
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
@@ -22,7 +23,7 @@ export default function Home() {
     const rect = e.target.getBoundingClientRect();
     const x = Math.round(e.clientX - rect.left);
     const y = Math.round(e.clientY - rect.top);
-    alert(`Clicked at X: ${x}, Y: ${y}`);
+    setClicks(prev => [...prev, { x, y }]);
   };
 
   return (
@@ -46,6 +47,22 @@ export default function Home() {
             onClick={handleClick}
           />
         )}
+
+        {clicks.map((pt, idx) => (
+          <div
+            key={idx}
+            style={{
+              position: 'absolute',
+              top: pt.y + 'px',
+              left: pt.x + 'px',
+              width: '10px',
+              height: '10px',
+              background: 'red',
+              borderRadius: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        ))}
       </div>
     </div>
   );
