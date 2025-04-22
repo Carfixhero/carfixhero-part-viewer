@@ -1,4 +1,4 @@
-// Step 1: Basic Image Viewer (without Tesseract)
+// Step 1: Basic Image Viewer (clickable coordinates)
 // This file goes into: pages/index.js
 
 import { useRef, useState } from 'react';
@@ -18,6 +18,13 @@ export default function Home() {
     reader.readAsDataURL(file);
   };
 
+  const handleClick = (e) => {
+    const rect = e.target.getBoundingClientRect();
+    const x = Math.round(e.clientX - rect.left);
+    const y = Math.round(e.clientY - rect.top);
+    alert(`Clicked at X: ${x}, Y: ${y}`);
+  };
+
   return (
     <div style={{ padding: '2rem' }}>
       <h1>📷 Upload Image</h1>
@@ -32,7 +39,12 @@ export default function Home() {
 
       <div style={{ position: 'relative', marginTop: '20px' }}>
         {imgSrc && (
-          <img src={imgSrc} alt="Diagram" style={{ maxWidth: '100%' }} />
+          <img
+            src={imgSrc}
+            alt="Diagram"
+            style={{ maxWidth: '100%' }}
+            onClick={handleClick}
+          />
         )}
       </div>
     </div>
